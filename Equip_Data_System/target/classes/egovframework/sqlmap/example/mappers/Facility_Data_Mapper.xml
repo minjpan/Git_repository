@@ -27,6 +27,10 @@
 	SELECT 
 		LOCATION_DATA AS locationArea
 	FROM FACILITY_LOCATION
+	WHERE 1=1
+	<if test="locationArea != null and !locationArea.equals('')">
+	AND LOCATION_DATA  LIKE '%'||#{locationArea}||'%'
+	</if>
 	GROUP BY LOCATION_DATA
 	</select>
 
@@ -47,9 +51,12 @@
 			<if test="stsNameId != null and !stsNameId.equals('')">
 			AND C.STATUS_NAME_ID = #{stsNameId}
 			</if>
-			<if test="locationArea != null and !locationArea.equals('')">
-			AND D.LOCATION_DATA  =  #{locationArea} 
-			</if>
+			<if test="locationArea != null and locationArea != ''">
+		      AND D.LOCATION_DATA IN
+		      <foreach item="item" collection="locationArea.split(',')" open="(" separator="," close=")">
+		        #{item}
+		      </foreach>
+		    </if>
 		OFFSET #{firstIndex} ROWS FETCH NEXT #{recordCountPerPage} ROW ONLY
 	</select>
 	
@@ -72,9 +79,12 @@
 			<if test="stsNameId != null and !stsNameId.equals('')">
 			AND C.STATUS_NAME_ID = #{stsNameId}
 			</if>
-			<if test="locationArea != null and !locationArea.equals('')">
-			AND D.LOCATION_DATA IN '(' || #{locationArea} || ')'
-			</if>
+			<if test="locationArea != null and locationArea != ''">
+		      AND D.LOCATION_DATA IN
+		      <foreach item="item" collection="locationArea.split(',')" open="(" separator="," close=")">
+		        #{item}
+		      </foreach>
+		    </if>
 	    ) A
     </select>
 </mapper>

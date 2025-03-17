@@ -73,13 +73,26 @@ body {
 }
 
 .filter-group {
-  display: flex; 									/* 상태와 위치를 가로로 배치 */
-  align-items: center; 						/* 수직 중앙 정렬 */
-  position: relative; 						/* 드롭다운 위치를 위한 relative 설정 */
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .filter-group label {
    margin-right: 10px; 						/* 라벨 간 간격 */
+}
+
+/* status-container 스타일 추가 */
+.status-container {
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  gap: 5px;            /* 텍스트와 Selectmenu 사이 간격 */
+}
+
+/* "상태" 텍스트 스타일 */
+.status-container label {
+  margin-right: 5px;
+  white-space: nowrap;
 }
 
 .filter button {
@@ -100,37 +113,110 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 200px; /* 입력 필드 너비 고정 */
+    font-size : 10px;
 }
 
-/* 자동 완성 드롭다운 스타일 */
-.autocomplete-suggestions {
-    position: absolute;
-        top: calc(100% + 2px); /* 입력 필드 바로 아래, 약간 여백 추가 */
-        left: 190px; /* '위치:' 라벨 너비에 맞춤 (필요 시 조정) */
-        width: 200px; /* 입력 필드와 동일한 너비 */
-        border: 1px solid #918888;
-        border-radius: 10px;
-        background: #e5e1e1;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 추가 */
-        max-height: 150px;
-        overflow-y: auto;
-        z-index: 20;
-        display: none;
-        font-size:12px;
+/* location-container 스타일 수정 */
+.location-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* 오른쪽 끝으로 정렬 */
+  width: 100%;              /* 부모 너비를 활용해 공간 확보 */
+  gap: 10px;                /* 입력 필드와 태그 사이 간격 */
 }
 
-.autocomplete-suggestions div {
-        padding: 4px 12px; /* 좌우 패딩 추가로 깔끔하게 */
-        cursor: pointer;
-        border-bottom: 0px solid #f0f0f0; /* 항목 간 구분선 */
-        font-size:12px;
+.location-container label {
+  margin-right: 5px;
+  white-space: nowrap;
 }
-.autocomplete-suggestions div:last-child {
-    border-bottom: none; /* 마지막 항목의 구분선 제거 */
+
+/* 선택된 위치 태그 스타일 */
+.selected-locations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-left: auto;
 }
-.autocomplete-suggestions div:hover {
-    background-color: #e9ecef; /* 호버 색상 개선 */
+
+.location-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  background: #e9ecef;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  font-size: 12px;
 }
+
+.location-tag .remove-tag {
+  margin-left: 5px;
+  cursor: pointer;
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+/* 모두 지우기 버튼 스타일 추가 */
+.clear-btn {
+  padding: 3px 10px;
+  background-color: #dc3545; /* 빨간색 계열 */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.clear-btn:hover {
+  background-color: #c82333;
+}
+
+/* jQuery UI Autocomplete 스타일 */
+.ui-autocomplete {
+    max-height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background: white;
+    z-index: 1000;
+    font-size: 12px;
+}
+
+/* jQuery UI Selectmenu 커스터마이징 */
+.ui-selectmenu-button {
+  padding: 3px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 12px;
+}
+
+.ui-selectmenu-button.ui-button {
+  width: 120px; /* 드롭다운 너비 고정 */
+}
+
+.ui-selectmenu-menu {
+  max-height: 150px; /* 드롭다운 최대 높이 */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 12px;
+}
+
+.ui-menu-item {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.ui-menu-item:hover {
+  background-color: #e9ecef;
+}
+
+
+
 
 .footer {
   grid-area: footer;

@@ -5,8 +5,10 @@ let pageSize = 10;
 
 let dataTmp;
 let dataTmpList = [];
-const locationInput = document.getElementById('locationArea');
-const suggestionsBox = document.getElementById('autocompleteSuggestions');
+let selectedLocations = []; // 선택된 위치 배열
+
+//const locationInput = document.getElementById('locationArea');
+//const suggestionsBox = document.getElementById('autocompleteSuggestions');
 
 	
 $(document).ready(function() {
@@ -17,8 +19,6 @@ $(document).ready(function() {
 	    { header: 'Status ID', 				name: 'statusId' ,  			align : 'center'},
 	    { header: 'Status Name', 		name: 'statusName' ,  	align : 'center'},
 	    { header: 'Location', 				name: 'locationArea' ,  	align : 'center'}
-	    
-	    
 	];
 
 	  grid = new tui.Grid({
@@ -30,6 +30,10 @@ $(document).ready(function() {
 		  scrollY: true,
 		  rowHeaders : ['rowNum']
 	});
+	
+	$("#facilityStatusSelect").selectmenu({
+      width: 120
+    });
 	
 	// 초기 데이터 로드
     loadFacilityData(currentPage);
@@ -55,88 +59,104 @@ $(document).ready(function() {
         }
     });
 
-	// 필터링 기능 추가
-//	const statusFilter = document.getElementById('status-filter');
-//	const locationFilter = document.getElementById('location-filter');
-
-//	function applyFilters() {
-//	  const statusValue = statusFilter.value;
-//	  const locationValue = locationFilter.value.toLowerCase();
-//
-//	  const filteredData = data.filter(row => {
-//	    const matchesStatus = !statusValue || row.status === statusValue;
-//	    const matchesLocation = !locationValue || row.location.toLowerCase().includes(locationValue);
-//	    return matchesStatus && matchesLocation;
-//	  });
-	  
-//	  grid.resetData(filteredData);
-//	}
-
-//	statusFilter.addEventListener('change', applyFilters);
-//	locationFilter.addEventListener('input', applyFilters);
-	
-
 	//selectComboBox
 	loadStsNameComboList();
 	
-	locationInput.addEventListener('input', function() {
-    const input = this.value.trim();
-    if (input) {
-        loadLocAreaInfo(input); // 입력값으로 서버 데이터 요청
-    } else {
-        suggestionsBox.innerHTML = '';
-        suggestionsBox.style.display = 'none';
+	// jQuery UI Autocomplete 설정
+	$("#locationArea").autocomplete({
+	    source: function(request, response) {
+	        const input = request.term.trim();
+	        if (input) {
+	            loadLocAreaInfo(input, function(data) {
+					// 이미 선택된 항목 제외
+                    const availableLocations = [];
+                    for (let i = 0; i < data.length; i++) {
+                        if (!selectedLocations.includes(data[i])) {
+                            availableLocations.push(data[i]);
+                        }
+                    }
+                    response(availableLocations);
+	            });
+	        } else {
+	            response([]);
+	        }
+	    },
+    minLength: 1,
+    delay: 300,
+    select: function(event, ui) {
+      const selectedValue = ui.item.value;
+      if (!selectedLocations.includes(selectedValue)) {
+        selectedLocations.push(selectedValue);
+        renderSelectedLocations();
+      }
+      $("#locationArea").val(""); // 선택 후 입력 필드 초기화
+      return false;
     }
-});
-	
-	document.addEventListener('click', function(event) {
-//		suggestionsBox = document.getElementById('autocompleteSuggestions');
-    	if (!locationInput.contains(event.target) && !suggestionsBox.contains(event.target)) {
-        	suggestionsBox.style.display = 'none';
-    	}
-	});
-	
-	// 초기값으로 호출
-    const initialInput = locationInput.value.trim(); // 입력 필드의 초기 값
-    loadLocAreaInfo(initialInput || ''); // 빈 문자열로 기본값 설정
+  }).on("keypress", function(event) {
+    if (event.keyCode === 13) {
+      loadFacilityData(1);
+    }
+  });
     
-    //enter key Search
-    $("#locationArea").on("keypress", function(event) {
-        if (event.keyCode === 13) {
-            loadFacilityData(1);
+    // 태그 렌더링 함수
+  function renderSelectedLocations() {
+    const container = $("#selectedLocations");
+    container.empty();
+    selectedLocations.forEach(location => {
+      const tag = $(`
+        <span class="location-tag">
+          ${location}
+          <span class="remove-tag">x</span>
+        </span>
+      `);
+      container.append(tag);
+    });
+  }
+	
+	// 위치 입력 필드에서 Enter로 태그 추가
+    $("#locationArea").on("keypress", function(e) {
+      if (e.which === 13) { // Enter 키
+        const value = $(this).val().trim();
+        if (value) {
+          addLocationTag(value);
+          $(this).val(""); // 입력 필드 초기화
         }
+      }
     });
     
+    // 태그 추가 함수
+    function addLocationTag(value) {
+      const tag = `
+        <span class="location-tag">
+          ${value}
+          <span class="remove-tag">x</span>
+        </span>
+      `;
+      $("#selectedLocations").append(tag);
+    }
+	
+// 개별 태그 삭제
+  $("#selectedLocations").on("click", ".remove-tag", function() {
+    const location = $(this).parent(".location-tag").text().replace('x', '').trim();
+    selectedLocations = selectedLocations.filter(loc => loc !== location);
+    renderSelectedLocations();
+    loadFacilityData(currentPage); // 데이터 새로고침
+  });
     
-    // jQuery UI Autocomplete 설정
-        $("#locationArea").autocomplete({
-            source: function(request, response) {
-                const input = request.term.trim();
-                if (input) {
-                    loadLocAreaInfo(input, function(data) {
-                        response(data);
-                    });
-                } else {
-                    response([]);
-                }
-            },
-            minLength: 1, // 최소 1글자 입력 시 요청
-            delay: 300, // 300ms 지연 후 요청 (디바운스 효과)
-            select: function(event, ui) {
-                $("#locationArea").val(ui.item.value); // 선택 시 값 설정
-                return false; 
-            }
-        });
-    
-    
-    
+// 모든 태그 삭제
+  $("#clearLocations").on("click", function() {
+    selectedLocations = [];
+    renderSelectedLocations();
+    loadFacilityData(currentPage); // 데이터 새로고침
+  });
+
+  // 초기 테스트 태그 추가
+  renderSelectedLocations();
 });
 
 // Ajax로 데이터 조회
 function loadFacilityData(page) {
-	
-	const locationArea =  $('#locationArea').val().trim();
-	
+	const locationArea =  selectedLocations.join(',');
     $.ajax({
         url: '/selectFacilityList.do',
         method: 'GET',
@@ -163,14 +183,11 @@ function loadFacilityData(page) {
 			currentPage = pagination.currentPage;
 			totalPages = pagination.totalPages;
 			pageSize = pagination.pageSize;
-			$('#pageInfo').text(`Page ${currentPage} of ${totalPages} (Total: ${pagination.totalRecords})`);
 			
-			// 버튼 활성화/비활성화
+			$('#pageInfo').text('Page ' + currentPage + ' of ' + totalPages + ' (Total: ' + pagination.totalRecords + ')');
+
             $('#prevPage').prop('disabled', currentPage === 1);
-            $('#nextPage').prop('disabled', currentPage === totalPages);
-            
-            console.log('데이터 조회 성공:', response);
-           
+    		$('#nextPage').prop('disabled', currentPage === totalPages);
         },
         error: function(xhr, status, error) {
     		console.error('데이터 조회 실패 - 상태: ' + status + ', 에러: ' + error + ', 응답: ' + xhr.responseText);
@@ -203,59 +220,58 @@ function loadStsNameComboList() {
 	}) 
 }
 
-function loadLocAreaInfo(inputValue) {
-	
-	locationArea =  $('#locationArea').val().trim();
-	
+function loadLocAreaInfo(inputValue, callback) {
 	$.ajax({ 
       url: "/selectLocAreaInfo.do", 
       method: 'GET',
-      data : {locationArea : locationArea.toUpperCase()},
+      data : {locationArea : inputValue.toUpperCase()},
       dataType : "json",
       success: function(data) {
 			if (data && data.length > 0) {
-	            // dataTmpList를 배열로 갱신
-	            dataTmpList = data.map(function(item) {
-					return item.locationArea;
-				});
-	            console.log('dataTmpList updated: ', dataTmpList);
-	            updateSuggestions(inputValue); // 데이터 갱신 후 추천 목록 업데이트
-	        } else {
-	            dataTmpList = [];
-	            console.log('No data received');
-	        }
-	    },
+                dataTmpList = [];
+                for (let i = 0; i < data.length; i++) {
+                    dataTmpList.push(data[i].locationArea);
+                }
+                console.log('dataTmpList updated: ', dataTmpList);
+                callback(dataTmpList);
+            } else {
+                dataTmpList = [];
+                console.log('No data received');
+                callback([]);
+            }
+        },
 	    error: function(error) {
 			console.error('error: ' + error); // 상태 코드 추가
 	        alert('데이터를 불러오지 못했습니다.');
+	        callback([]);
         }
 	});
 }
 
 // 추천 목록 업데이트 함수
-function updateSuggestions(input) {
-    suggestionsBox.innerHTML = '';
-    suggestionsBox.style.display = 'none';
-
-    if (input && dataTmpList.length > 0) {
-        const filteredLocations = dataTmpList.filter(function(location) {
-			return location.toLowerCase().includes(input.toLowerCase());
-			});
-
-        if (filteredLocations.length > 0) {
-            filteredLocations.forEach(function(location) {
-                const suggestion = document.createElement('div');
-                suggestion.textContent = location;
-                suggestion.addEventListener('click', function() {
-                    locationInput.value = location;
-                    suggestionsBox.style.display = 'none';
-                });
-                suggestionsBox.appendChild(suggestion);
-            });
-            suggestionsBox.style.display = 'block';
-        }
-    }
-}
+//function updateSuggestions(input) {
+//    suggestionsBox.innerHTML = '';
+//    suggestionsBox.style.display = 'none';
+//
+//    if (input && dataTmpList.length > 0) {
+//        const filteredLocations = dataTmpList.filter(function(location) {
+//			return location.toLowerCase().includes(input.toLowerCase());
+//			});
+//
+//        if (filteredLocations.length > 0) {
+//            filteredLocations.forEach(function(location) {
+//                const suggestion = document.createElement('div');
+//                suggestion.textContent = location;
+//                suggestion.addEventListener('click', function() {
+//                    locationInput.value = location;
+//                    suggestionsBox.style.display = 'none';
+//                });
+//                suggestionsBox.appendChild(suggestion);
+//            });
+//            suggestionsBox.style.display = 'block';
+//        }
+//    }
+//}
 	
 
   

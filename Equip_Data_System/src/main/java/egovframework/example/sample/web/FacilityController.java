@@ -39,7 +39,7 @@ public class FacilityController {
 	
 	@GetMapping("/facilityMain.do")
 	public String facilityMain(HttpServletRequest req, HttpServletResponse resp,  ModelMap model) throws Exception {
-		return "facility/facilityTestFile";
+		return "facility/facilityFile";
 	}
 	
 	/** 상태 selectCombo */

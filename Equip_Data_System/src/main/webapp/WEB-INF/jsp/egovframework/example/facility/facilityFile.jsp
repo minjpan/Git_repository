@@ -26,31 +26,26 @@
       <div class="user-info">사용자: admin</div>
     </header>
 
-    <!-- 내비게이션 -->
-    <nav class="nav">
-      <ul>
-       <li><a href="#">설비 데이터 목록</a></li>
-        <li><a href="#">설비 제작</a></li>
-        <li><a href="#">설비 부서</a></li>
-        <li><a href="#">설비 통계</a></li>
-      </ul>
-    </nav>
+    <!-- 네비게이션 include -->
+    <%@ include file="/WEB-INF/jsp/egovframework/example/cmmn/frame/nav.jsp" %>
 
     <!-- 메인 콘텐츠 -->
     <main class="main">
-      <h2>설비 데이터 목록</h2>
+      <h3>설비 데이터 목록</h3>
       <!-- 필터 영역 -->
       <div class="filter">
       	<div class="filter-group"> <!-- 상태와 위치를 묶는 그룹 -->
-	        <label>상태: 
-	          <select id="facilityStatusSelect">
-			    <option value="">-- 전체 --</option>
-			</select>
-	        </label>
-	        <label>위치: 
-	          <input type="text" id="locationArea" placeholder="위치를 적어주세요">
-	          <div id="autocompleteSuggestions" class="autocomplete-suggestions"></div>
-	        </label>
+	   		 <div class="status-container">
+		      <label for="facilityStatusSelect" style="font-size: 13px;">상태:</label>
+		      <select id="facilityStatusSelect">
+		        <option value="">-- 전체 --</option>
+		      </select>
+		    </div>
+	      <div class="location-container">
+	       	 <label for="locationArea" style="font-size: 13px;">위치:</label><!-- label을 여기로 이동 -->
+		     <input type="text" id="locationArea" placeholder="위치를 적어주세요">
+		     <div id="selectedLocations" class="selected-locations"></div>
+			<button id="clearLocations" class="clear-btn">모두 지우기</button> <!-- 추가 -->	      </div>
         </div>
         <div class="form-group" id="selectUser"></div>
         <button id="searchBtn">조회</button> <!-- 조회 버튼 추가 -->
