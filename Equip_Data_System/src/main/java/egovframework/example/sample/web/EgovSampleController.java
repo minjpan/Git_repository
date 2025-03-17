@@ -65,6 +65,7 @@ public class EgovSampleController {
 	/** Validator */
 	private final DefaultBeanValidator beanValidator;
 
+	
 	/**
 	 * 글 목록을 조회한다. (pageing)
 	 * @param searchVO - 조회할 정보가 담긴 SampleDefaultVO
@@ -96,7 +97,7 @@ public class EgovSampleController {
 		paginationInfo.setTotalRecordCount(totCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
 
-		return "facility/facilityTestFile";
+		return "sample/egovSampleList";
 	}
 
 	/**

@@ -28,10 +28,18 @@
     </bean>
     -->
     
-    <!-- oracle (POM에서 commons-dbcp, ojdbc(라이센스 사항으로 별도로 배포되지 않음) 관련 라이브러리 설정)          -->
+    <!-- oracle (POM에서 commons-dbcp, ojdbc(라이센스 사항으로 별도로 배포되지 않음) 관련 라이브러리 설정)     
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@127.0.0.1:1521:orcl" />
+        <property name="username" value="LovedHoneyAnt"/>
+        <property name="password" value="santa"/>
+    </bean>
+      -->
+    
+     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+        <property name="url" value="jdbc:log4jdbc:oracle:thin:@127.0.0.1:1521:orcl" />
         <property name="username" value="LovedHoneyAnt"/>
         <property name="password" value="santa"/>
     </bean>

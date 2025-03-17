@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.example.sample.service.impl.FacilityMapper">
+
+<!-- 		<resultMap id="paramMap" type="egovframework.example.sample.service.FacilityVO"> -->
+<!-- 			<result property="facilityId" 			column="facilityId"/> -->
+<!-- 			<result property="facilityName" 	column="facilityName"/> -->
+<!-- 			<result property="partId" 				column="partId"/> -->
+<!-- 			<result property="partId" 				column="partId"/> -->
+<!-- 			<result property="statusId" 			column="statusId"/> -->
+<!-- 			<result property="statusName" 	column="statusName"/> -->
+<!-- 		</resultMap> -->
+
+	<select id="selectStsNameList" parameterType="facilityVO" resultType="egovframework.example.sample.service.FacilityVO">
+	/* selectStsNameList */
+	SELECT 
+		STATUS_NAME 			AS stsName
+		,STATUS_NAME_ID 		AS stsNameId
+	FROM   FACILITY_STATUS
+	WHERE 1=1
+	GROUP BY STATUS_NAME, STATUS_NAME_ID
+	</select>
+	
+	<select id="selectLocAreaInfo" parameterType="facilityVO" resultType="egovframework.example.sample.service.FacilityVO">
+	/* selectLocAreaInfo */
+	SELECT 
+		LOCATION_DATA AS locationArea
+	FROM FACILITY_LOCATION
+	GROUP BY LOCATION_DATA
+	</select>
+
+	<select id="selectFacilityDataList" parameterType="facilityVO" resultType="egovframework.example.sample.service.FacilityVO">
+	/* selectFacilityDataList */
+		SELECT DISTINCT
+		     A.FACILITY_ID 			AS facilityId
+		    ,A.FACILITY_NAME 		AS facilityName 
+		    ,B.PART_ID 					AS partId
+		    ,C.STATUS_ID 				AS statusId
+			,C.STATUS_NAME 		AS statusName
+		    ,D.LOCATION_DATA     AS locationArea
+		FROM FACILITY A, FACILITY_PART B, FACILITY_STATUS C, FACILITY_LOCATION D
+		WHERE 1=1
+		AND A.FACILITY_ID = B.FACILITY_ID
+		AND A.FACILITY_ID = C.FACILITY_ID
+		AND A.FACILITY_ID = D.FACILITY_ID
+			<if test="stsNameId != null and !stsNameId.equals('')">
+			AND C.STATUS_NAME_ID = #{stsNameId}
+			</if>
+			<if test="locationArea != null and !locationArea.equals('')">
+			AND D.LOCATION_DATA  =  #{locationArea} 
+			</if>
+		OFFSET #{firstIndex} ROWS FETCH NEXT #{recordCountPerPage} ROW ONLY
+	</select>
+	
+	<select id="selectFacilityCnt" parameterType="facilityVO" resultType="int">
+	/* selectFacilityCnt */
+        SELECT COUNT(*) AS cnt
+	    FROM (
+	        SELECT DISTINCT
+			     A.FACILITY_ID 			AS facilityId
+			    ,A.FACILITY_NAME 		AS facilityName 
+			    ,B.PART_ID 					AS partId
+			    ,C.STATUS_ID 				AS statusId
+				,C.STATUS_NAME 		AS statusName
+			    ,D.LOCATION_DATA     AS locationArea
+			FROM FACILITY A, FACILITY_PART B, FACILITY_STATUS C, FACILITY_LOCATION D
+			WHERE 1=1
+			AND A.FACILITY_ID = B.FACILITY_ID
+			AND A.FACILITY_ID = C.FACILITY_ID
+			AND A.FACILITY_ID = D.FACILITY_ID
+			<if test="stsNameId != null and !stsNameId.equals('')">
+			AND C.STATUS_NAME_ID = #{stsNameId}
+			</if>
+			<if test="locationArea != null and !locationArea.equals('')">
+			AND D.LOCATION_DATA IN '(' || #{locationArea} || ')'
+			</if>
+	    ) A
+    </select>
+</mapper>

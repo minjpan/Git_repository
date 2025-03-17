@@ -13,8 +13,6 @@
 	<title>설비 관리 대시보드</title>
 	<!-- TUI Grid CSS -->
 	<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-	<!-- jQuery UI CSS -->
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<!-- 커스텀 CSS -->
 	<link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/main.css'/>"/>
 </head>
@@ -29,7 +27,7 @@
     <!-- 내비게이션 -->
     <nav class="nav">
       <ul>
-       <li><a href="#">설비 데이터 목록</a></li>
+       <li><a href="#">설비 목록 </a></li>
         <li><a href="#">설비 제작</a></li>
         <li><a href="#">설비 부서</a></li>
         <li><a href="#">설비 통계</a></li>
@@ -41,28 +39,21 @@
       <h2>설비 데이터 목록</h2>
       <!-- 필터 영역 -->
       <div class="filter">
-      	<div class="filter-group"> <!-- 상태와 위치를 묶는 그룹 -->
-	        <label>상태: 
-	          <select id="facilityStatusSelect">
-			    <option value="">-- 전체 --</option>
-			</select>
-	        </label>
-	        <label>위치: 
-	          <input type="text" id="locationArea" placeholder="위치를 적어주세요">
-	          <div id="autocompleteSuggestions" class="autocomplete-suggestions"></div>
-	        </label>
-        </div>
-        <div class="form-group" id="selectUser"></div>
+        <label>상태: 
+          <select id="status-filter">
+            <option value="">전체</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="Maintenance">Maintenance</option>
+          </select>
+        </label>
+        <label>위치: 
+          <input type="text" id="location-filter" placeholder="위치 검색">
+        </label>
         <button id="searchBtn">조회</button> <!-- 조회 버튼 추가 -->
       </div>
       <!-- TUI Grid -->
       <div id="grid"></div>
-      <div id="grid"></div>
-      <div class="pagination">
-          <button id="prevPage">이전</button>
-          <span id="pageInfo"></span>
-          <button id="nextPage">다음</button>
-      </div>
     </main>
 
     <!-- 푸터 -->
@@ -70,12 +61,10 @@
       <p>© 2025 xAI. All rights reserved.</p>
     </footer>
   </div>
-<!-- Jquery js -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
   <!-- TUI Grid JS -->
   <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="${pageContext.request.contextPath}/js/facility.js"></script>
 </body>
 </html>

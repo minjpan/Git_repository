@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.example.sample.service.impl.FacilityMapper">
+
+<!-- 		<resultMap id="paramMap" type="egovframework.example.sample.service.FacilityVO"> -->
+<!-- 			<result property="facilityId" 			column="facilityId"/> -->
+<!-- 			<result property="facilityName" 	column="facilityName"/> -->
+<!-- 			<result property="partId" 				column="partId"/> -->
+<!-- 			<result property="partId" 				column="partId"/> -->
+<!-- 			<result property="statusId" 			column="statusId"/> -->
+<!-- 			<result property="statusName" 	column="statusName"/> -->
+<!-- 		</resultMap> -->
+
+<select id="selectFacilityDataList" parameterType="facilityVO" resultType="egovframework.example.sample.service.FacilityVO">
+		SELECT DISTINCT
+		     A.FACILITY_ID 			AS facilityId
+		    ,A.FACILITY_NAME 		AS facilityName 
+		    ,B.PART_ID 					AS partId
+		    ,C.STATUS_ID 				AS statusId
+			,C.STATUS_NAME 		AS statusName
+		FROM FACILITY A, FACILITY_PART B, FACILITY_STATUS C
+		WHERE 1=1
+		AND A.FACILITY_ID = B.FACILITY_ID
+		AND A.FACILITY_ID = C.FACILITY_ID
+		OFFSET #{firstIndex} ROWS FETCH NEXT #{recordCountPerPage} ROW ONLY
+	</select>
+</mapper>
