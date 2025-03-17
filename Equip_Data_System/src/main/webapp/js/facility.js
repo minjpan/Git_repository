@@ -124,7 +124,7 @@ $(document).ready(function() {
             delay: 300, // 300ms 지연 후 요청 (디바운스 효과)
             select: function(event, ui) {
                 $("#locationArea").val(ui.item.value); // 선택 시 값 설정
-                return false;
+                return false; 
             }
         });
     
