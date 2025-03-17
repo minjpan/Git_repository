@@ -3,6 +3,14 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
 	<display-name>egov.sample</display-name>
+	
+	<!-- EL 비활성화 방지 (기본값은 true) -->
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <el-ignored>false</el-ignored>
+        </jsp-property-group>
+    </jsp-config>
     
 	<filter>
 		<filter-name>encodingFilter</filter-name>
