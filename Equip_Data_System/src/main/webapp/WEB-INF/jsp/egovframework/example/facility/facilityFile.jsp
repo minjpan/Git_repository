@@ -20,11 +20,9 @@
 </head>
 <body>
  <div class="container">
-    <!-- 헤더 -->
-    <header class="header">
-     <div class="logo">설비 관리 시스템</div>
-      <div class="user-info">사용자: admin</div>
-    </header>
+ 
+    <!-- 헤더 include -->
+     <%@ include file="/WEB-INF/jsp/egovframework/example/cmmn/frame/header.jsp" %>
 
     <!-- 네비게이션 include -->
     <%@ include file="/WEB-INF/jsp/egovframework/example/cmmn/frame/nav.jsp" %>
@@ -60,10 +58,9 @@
       </div>
     </main>
 
-    <!-- 푸터 -->
-    <footer class="footer">
-      <p>© 2025 xAI. All rights reserved.</p>
-    </footer>
+    <!-- footer include-->
+     <%@ include file="/WEB-INF/jsp/egovframework/example/cmmn/frame/footer.jsp" %>
+     
   </div>
 <!-- Jquery js -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
