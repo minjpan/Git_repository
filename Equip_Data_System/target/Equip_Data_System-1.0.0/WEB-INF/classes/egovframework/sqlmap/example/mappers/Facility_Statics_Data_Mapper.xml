@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.example.sample.mapper.FacilityStaticsMapper">
+
+	<select id="getSelectStaticsList" parameterType="facilityVO" resultType="egovframework.example.sample.Vo.FacilityVO">
+	/* getSelectStaticsList */
+	SELECT  
+		 ROWNUM AS RUM
+	    ,COSTID
+	    ,MAINTENANCEID
+	    ,COSTAMOUNT
+    FROM(
+	SELECT 
+	     COST_ID            AS COSTID
+	    ,MAINTENANCE_ID     AS MAINTENANCEID
+	    ,COST_AMOUNT        AS COSTAMOUNT
+	FROM MAINTENANCE_COST
+	ORDER BY COST_AMOUNT DESC
+	) A
+	WHERE 1=1
+	AND ROWNUM <![CDATA[<=]]> 10
+	</select>
+	
+</mapper>

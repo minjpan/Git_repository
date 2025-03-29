@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.egovframe.rte.psl.dataaccess.mapper.Mapper;
 
-import egovframework.example.sample.service.FacilityVO;
+import egovframework.example.sample.vo.FacilityVO;
 
 @Mapper
 public interface FacilityMapper {

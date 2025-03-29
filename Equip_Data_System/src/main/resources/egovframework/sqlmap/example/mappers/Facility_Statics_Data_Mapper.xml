@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egovframework.example.sample.service.impl.FacilityStaticsMapper">
+
+	<select id="getSensorSelectStatics" parameterType="facilityVO" resultType="egovframework.example.sample.vo.FacilityVO">
+	/* getSensorSelectStatics */
+	SELECT 
+	     A.SENSOR_TYPE               			AS sensorName
+	    ,ROUND(RATIO_TO_REPORT(SUM(B.READING_VALUE)) OVER(PARTITION BY GROUPING_ID(A.SENSOR_TYPE)) * 100,2)    AS sensorValue
+	FROM SENSOR A, SENSOR_DATA B
+	WHERE A.SENSOR_ID = B.SENSOR_ID
+	AND A.INSTALL_DATE BETWEEN #{srtDate} AND #{endDate}
+	GROUP BY A.SENSOR_TYPE
+	</select>
+	
+	<select id="getCntryEneAmnt" parameterType="facilityVO" resultType="egovframework.example.sample.vo.FacilityVO">
+	/* getCntryEneAmnt */
+	SELECT 
+    	B.LOCATION_DATA AS locationData
+    	,ROUND(RATIO_TO_REPORT(SUM(ENERGY_AMOUNT)) OVER(PARTITION BY GROUPING_ID(B.LOCATION_DATA)) * 100,2) as energyAmount
+	FROM ENERGY_USAGE A, FACILITY_LOCATION B
+	WHERE 1=1
+	AND A.FACILITY_ID = B.LOCATION_ID
+	AND A.USAGE_DATE BETWEEN #{srtDate} AND #{endDate}
+	GROUP BY B.LOCATION_DATA
+	</select>
+	
+	
+</mapper>
