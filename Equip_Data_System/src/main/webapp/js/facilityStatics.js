@@ -48,7 +48,7 @@ function initializeDatePickers() {
         date: oneYearsAgo,
         input: {
             element: '#start-date-picker-target',
-            format: 'yyyy-MM-dd'
+            format: 'yyyy-MM-dd'   
         },
         selectableRanges: [
             [tenYearsAgo, oneYearLater]
