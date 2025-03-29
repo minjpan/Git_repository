@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import egovframework.example.sample.service.FacilityService;
-import egovframework.example.sample.service.FacilityVO;
+import egovframework.example.sample.vo.FacilityVO;
 import egovframework.example.sample.service.SampleDefaultVO;
 import lombok.RequiredArgsConstructor;
 

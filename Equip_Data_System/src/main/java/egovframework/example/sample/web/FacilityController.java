@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import egovframework.example.sample.service.FacilityService;
-import egovframework.example.sample.service.FacilityVO;
 import egovframework.example.sample.service.SampleDefaultVO;
+import egovframework.example.sample.vo.FacilityVO;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -66,7 +66,6 @@ public class FacilityController {
         return jsonStsNameDataList;
 	}
 
-//	@GetMapping(value = "/selectFacilityList.do", produces = MediaType.APPLICATION_JSON_VALUE)
 	@GetMapping(value = "/selectFacilityList.do")
 	@ResponseBody
 	public String selectFacilityList(@ModelAttribute("searchVO") SampleDefaultVO searchVO, FacilityVO facilityVO, ModelMap model) throws Exception {
