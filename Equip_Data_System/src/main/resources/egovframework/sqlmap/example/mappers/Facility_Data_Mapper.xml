@@ -12,7 +12,7 @@
 <!-- 			<result property="statusName" 	column="statusName"/> -->
 <!-- 		</resultMap> -->
 
-	<select id="selectStsNameList" parameterType="facilityVO" resultType="egovframework.example.sample.service.FacilityVO">
+	<select id="selectStsNameList" parameterType="facilityVO" resultType="egovframework.example.sample.vo.FacilityVO">
 	/* selectStsNameList */
 	SELECT 
 		STATUS_NAME 			AS stsName
@@ -22,7 +22,7 @@
 	GROUP BY STATUS_NAME, STATUS_NAME_ID
 	</select>
 	
-	<select id="selectLocAreaInfo" parameterType="facilityVO" resultType="egovframework.example.sample.service.FacilityVO">
+	<select id="selectLocAreaInfo" parameterType="facilityVO" resultType="egovframework.example.sample.vo.FacilityVO">
 	/* selectLocAreaInfo */
 	SELECT 
 		LOCATION_DATA AS locationArea
@@ -34,7 +34,7 @@
 	GROUP BY LOCATION_DATA
 	</select>
 
-	<select id="selectFacilityDataList" parameterType="facilityVO" resultType="egovframework.example.sample.service.FacilityVO">
+	<select id="selectFacilityDataList" parameterType="facilityVO" resultType="egovframework.example.sample.vo.FacilityVO">
 	/* selectFacilityDataList */
 		SELECT DISTINCT
 		     A.FACILITY_ID 			AS facilityId
